@@ -1,0 +1,6 @@
+A simple application for tracking taxis. The application consists of an Android client and a server (parse.com)
+The android client uses the phone's GPS device to report data at a regular interval. The data is pulled out of parse
+in realtime and displayed on a map.
+
+Uses leaflet for displaying the map.
+
