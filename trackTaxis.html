@@ -40,8 +40,9 @@ function getInput() {
 function getDataFromParse(url) {
   var xhr = new XMLHttpRequest();
   xhr.open("GET", url, true);
-  xhr.setRequestHeader("X-Parse-Application-Id", "3EN6GtbpYtprWOJyqHNaPjXrJixp66F2qTQVOS30");
-  xhr.setRequestHeader("X-Parse-REST-API-Key", "KTNYweSLVvp8hI2mR3ekXUCzbJW4fIqay21aQk1O");
+  // To Do add the API Keys when you demo to clients.
+  xhr.setRequestHeader("X-Parse-Application-Id", "");
+  xhr.setRequestHeader("X-Parse-REST-API-Key", "");
   xhr.setRequestHeader("Content-Type", "application/json");
   xhr.send();
   xhr.onreadystatechange = function() {
