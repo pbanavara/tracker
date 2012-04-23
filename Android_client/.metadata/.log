@@ -1,0 +1,16 @@
+!SESSION 2012-04-23 09:57:32.297 -----------------------------------------------
+eclipse.buildId=M20110909-1335
+java.version=1.6.0_29
+java.vendor=Apple Inc.
+BootLoader constants: OS=macosx, ARCH=x86, WS=cocoa, NL=en_US
+Framework arguments:  -keyring /Users/pradeep/.eclipse_keyring -showlocation
+Command-line arguments:  -os macosx -ws cocoa -arch x86 -keyring /Users/pradeep/.eclipse_keyring -showlocation
+
+!ENTRY com.android.ide.eclipse.ddms 4 0 2012-04-23 09:57:57.612
+!MESSAGE DDMS files not found: /Users/pradeep/Downloads/eclipse 3/Eclipse.app/Contents/MacOS/platform-tools/adb /Users/pradeep/Downloads/eclipse 3/Eclipse.app/Contents/MacOS/tools/hprof-conv /Users/pradeep/Downloads/eclipse 3/Eclipse.app/Contents/MacOS/tools/traceview 
+
+!ENTRY org.eclipse.ui 4 4 2012-04-23 09:58:30.852
+!MESSAGE Invalid preference page path: XML Syntax
+
+!ENTRY org.eclipse.core.jobs 2 2 2012-04-23 09:58:31.807
+!MESSAGE Job found still running after platform shutdown.  Jobs should be canceled by the plugin that scheduled them during shutdown: net.rim.ejde.internal.util.B
