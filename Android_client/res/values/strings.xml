@@ -2,7 +2,7 @@
 <resources>
 
     <string name="hello">Hello World, TaxiGuideActivity!</string>
-    <string name="app_name">TaxiGuide</string>
+    <string name="app_name">Taxitrack</string>
     <string name="username">Please enter your name</string>
     <string name="vendorname">Please enter name of your vendor</string>
     <string name="phoneNumber">Please enter your phone number</string>
