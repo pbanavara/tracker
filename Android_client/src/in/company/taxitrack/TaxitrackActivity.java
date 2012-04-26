@@ -14,7 +14,7 @@ public class TaxitrackActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        Parse.initialize(this, "tg0f9TzBklEtZuTpD8rVWgtrY6KtwKOBCZzzX7rY", "z1gY2cL4MRTR8aI73DFDVERpYcmlEtP3304TtU6s");
+        Parse.initialize(this, "J3Q5NuBIcYNTeHFmMy3SzNQL2Mi9UKKG5Vga0H9O", "R16qeeoQB3DaILRvD7U8qhMk4nAmqCUW3bxmaE7u");
         
     }
     public void startLocationTracing(View view) {

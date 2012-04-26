@@ -40,8 +40,15 @@ public class DBHelper extends SQLiteOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase database) {
 		// TODO Auto-generated method stub
-		database.execSQL(dbCreate);
-
+		try {
+			database.beginTransaction();
+			database.execSQL(dbCreate);
+			database.setTransactionSuccessful();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			database.endTransaction();
+		}
 	}
 	
 	public void insertData(String userName, String vendorName, String phoneNumber, double latitude, double longitude, float speed, String timestamp) {

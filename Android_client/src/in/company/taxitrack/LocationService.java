@@ -1,7 +1,5 @@
 package in.company.taxitrack;
 
-import java.sql.Date;
-
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -10,18 +8,18 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.telephony.TelephonyManager;
 
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 
 public class LocationService extends Service{
-	private String phoneNumber;
-	private String userName;
-	private String vendorName;
 	private LocationManager locationManager;
 	private ParseObject data;
-	LocationListener listener;
+	private LocationListener listener;
+	private String userName;
+	private String phoneNumber;
+	private String vendorName;
+	//private DBHelper helper;
 	@Override
 	public void onCreate() {
 		
@@ -33,7 +31,8 @@ public class LocationService extends Service{
 		super.onDestroy();
 		locationManager.removeUpdates(listener);
 	}
-
+	
+	
 	/*
 	 * (non-Javadoc)
 	 * @see android.app.Service#onStartCommand(android.content.Intent, int, int)
@@ -41,12 +40,12 @@ public class LocationService extends Service{
 	 */
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		// TODO Auto-generated method stub
-			userName = intent.getExtras().getString("username");
-			phoneNumber = intent.getExtras().getString("phonenumber");
-			vendorName = intent.getExtras().getString("vendorname");
+			this.userName = intent.getExtras().getString("username");
+			this.phoneNumber = intent.getExtras().getString("phonenumber");
+			this.vendorName = intent.getExtras().getString("vendorname");
 		try{
 			locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+			//helper = new DBHelper(getApplicationContext());
 			listener = new MyLocationListener();
 			if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
 				locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 120000, 0, listener);
@@ -59,7 +58,6 @@ public class LocationService extends Service{
 		return super.onStartCommand(intent, flags, startId);
 	}
 
-
 	/*
 	 * Location listener implementation, upload data to parse every time the listener is invoked.
 	 */
@@ -70,9 +68,6 @@ public class LocationService extends Service{
 			// TODO Auto-generated method stub
 			try {
 				//Save data to database as well
-				DBHelper helper = new DBHelper(getApplicationContext());
-				helper.insertData(userName, vendorName, phoneNumber, location.getLatitude(), location.getLongitude(), location.getSpeed(),
-						new Date(System.currentTimeMillis()).toString());
 				data = new ParseObject("taxilocations");
 				ParseGeoPoint geoPoint = new ParseGeoPoint(location.getLatitude(),location.getLongitude());
 				data.put("ID", phoneNumber);
@@ -81,7 +76,6 @@ public class LocationService extends Service{
 				data.put("speed", location.getSpeed());
 				data.put("accuracy", location.getAccuracy());
 				data.saveInBackground();
-
 				/*
 				HttpClient client = new DefaultHttpClient();
 				JSONObject jId = new JSONObject();

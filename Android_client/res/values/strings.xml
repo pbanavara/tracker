@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="hello">Hello World, TaxiGuideActivity!</string>
+    <string name="hello">Hello World !</string>
     <string name="app_name">Taxitrack</string>
     <string name="username">Please enter your name</string>
     <string name="vendorname">Please enter name of your vendor</string>

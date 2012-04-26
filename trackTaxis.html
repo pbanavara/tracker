@@ -10,6 +10,9 @@
 var map,cloudmadeAttrib,cloudmadeUrl,cloudmadeAttribution,cloudmade;
 var mapCenter = new L.LatLng(12.970214, 77.56029); //Default the map Center to  Bangalore
 var markerData = [];
+var totalLength = 0;
+var intervalId;
+var markerCount = 0;
 
 function initializeMap() {
   map = new L.Map('map');
@@ -22,36 +25,34 @@ function initializeMap() {
 
 }
 
-function getInput() {
-  var url;
-  var phone = document.getElementById("phone").value;
-  var baseUrl = "https://api.parse.com/1/classes/taxilocations?where={\"ID\":\"";
-  if(phone !== "") {
-    url = baseUrl.concat(phone).concat("\"}").concat("&limit=100000");
-  } else {
-    url ="https://api.parse.com/1/classes/taxilocations?limit=100000";  
-  }
-  getDataFromParse(url);
-}
-
 /*
  * Retrieve data from the parse library
  */
 function getDataFromParse(url) {
   var xhr = new XMLHttpRequest();
-  xhr.open("GET", url, true);
-  xhr.setRequestHeader("X-Parse-Application-Id", "3EN6GtbpYtprWOJyqHNaPjXrJixp66F2qTQVOS30");
-  xhr.setRequestHeader("X-Parse-REST-API-Key", "KTNYweSLVvp8hI2mR3ekXUCzbJW4fIqay21aQk1O");
+  var newUrl = "";
+  if(totalLength === 0) {
+    newUrl = url;
+  } else if((totalLength > 0 )&& (totalLength < 1000)){
+    clearInterval(intervalId);
+  } else {
+    newUrl = url + "&skip=1000";
+  }
+  xhr.open("GET", newUrl, true);
+  //xhr.setRequestHeader("X-Parse-Application-Id", "3EN6GtbpYtprWOJyqHNaPjXrJixp66F2qTQVOS30");
+  //xhr.setRequestHeader("X-Parse-REST-API-Key", "KTNYweSLVvp8hI2mR3ekXUCzbJW4fIqay21aQk1O");
+  xhr.setRequestHeader("X-Parse-Application-Id", "VsbP7epJPb5KuHYIJtC1b730WLRgfEaHPPHULwRY");
+  xhr.setRequestHeader("X-Parse-REST-API-Key", "2KIkgZmIr36WwPuQOl5y6KD4tuC5ncTHrulxnSEq");
   xhr.setRequestHeader("Content-Type", "application/json");
   xhr.send();
   xhr.onreadystatechange = function() {
     if (xhr.readyState == 4) {
       var result = JSON.parse(xhr.responseText);
-      //alert(result.results.length);
-      displayTaxiPoints(result); 
-    }
+      totalLength = result.results.length;
+      alert("IN PARSE" + totalLength);
+        displayTaxiPoints(result); 
   }
-
+}
 }
 /*
  * Display the data points using markers on a leaflet based UI
@@ -62,17 +63,14 @@ function displayTaxiPoints(result) {
   });
  var greenIcon = new NewIcon();
   var marker;
-  clearMap();
+  //clearMap();
   var data = result.results; 
-  //var mapPan = new L.LatLng(dataPoints[0].locations.latitude, dataPoints[0].locations.longitude);
-  //map.panTo(mapPan); //Pan to the first location obtained by the query so as to focus properly
   for(var index=0;index<data.length;++index){
-    var lat = data[index].locations.latitude;
-    var lon = data[index].locations.longitude;
+    var lat = data[index].location.latitude;
+    var lon = data[index].location.longitude;
     var phoneNumber = data[index].ID;
-    //document.writeln("Lat = " + lat + "Lon =" + lon);
     var latLng = new L.LatLng(lat,lon);
-    if(phoneNumber === "12345") {
+    if(markerCount == 0) {
       marker = new L.Marker(latLng, {icon:greenIcon});
     } else {
       marker = new L.Marker(latLng);
@@ -81,6 +79,7 @@ function displayTaxiPoints(result) {
     map.addLayer(marker);
     markerData[index] = marker;
   }
+  markerCount = markerCount + 1;
 }
 
 function clearMap() {
@@ -91,14 +90,40 @@ function clearMap() {
   }
   markerData = [];
 }
+//Function to get a latlong for a predefined area;
+function getDriversInAnArea() {
+ // Hard coded Area to LatLong conversion. Use a different API to reverse GeoCode the address/area
+ var predefinedLatLongs = {Koramangala:{lat:12.9324963,lon:77.6228463},
+   "Jayanagar" : {lat:12.9263213, lon:77.5788228},
+   "MG Road" : {lat:12.9753531, lon:77.6068077},
+   "Malleshwaram" : {lat:13.0089756, lon:77.5710935},
+   "Indiranagar": {lat:12.9714728, lon:77.635567}};
+  var option = document.getElementById("area").value;
+  var temp = predefinedLatLongs[option];
+  var lat = temp.lat;
+  var lon = temp.lon;
+  var baseUrl ="https://api.parse.com/1/classes/LocationUpdate"; 
+  var rijuUrl = baseUrl + "?where={\"location\": {\"$nearSphere\":{\"__type\":\"GeoPoint\",\"latitude\":";
+  var newUrl = rijuUrl + lat + (",\"longitude\":") + lon + "},\"$maxDistanceInKilometers\":1.0}}&limit=1000";
+  //var url = "https://api.parse.com/1/classes/taxilocations?where={\"location\": {\"$nearSphere\":{\"_type\":\"GeoPoint\",\"latitude\":";
+  getDataFromParse(newUrl);
+}
 
 </script>
 <body onLoad="initializeMap()"> 
 <div id="trackUser" align="center">
-<p> Enter the phone number of the driver , Leave the entry blank to track all drivers
+<p> Select a location from the drop box to view all drivers in this location. 
 </p>
-<input type="text" id="phone" />
-<input type="submit" value="submit" onClick="getInput()"> 
+<select id="area">
+  <option value="Koramangala">Koramangala</option>
+  <option value="Jayanagar">Jayanagar</option>
+  <option value="MG Road">MG Road</option>
+  <option value="Malleshwaram">Malleshwaram</option>
+  <option value="Indiranagar">Indiranagar</option>
+</select>
+
+<input type="submit" value="submit" onClick="getDriversInAnArea()"> 
+<input type="submit" value="next" onClick="getDriversInAnArea()"> 
 </div>
 <div id="map" style="height: 800px"></div>
 </body>
