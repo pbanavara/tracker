@@ -14,7 +14,7 @@ public class TaxitrackActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        Parse.initialize(this, "J3Q5NuBIcYNTeHFmMy3SzNQL2Mi9UKKG5Vga0H9O", "R16qeeoQB3DaILRvD7U8qhMk4nAmqCUW3bxmaE7u");
+        Parse.initialize(this, "tg0f9TzBklEtZuTpD8rVWgtrY6KtwKOBCZzzX7rY", "z1gY2cL4MRTR8aI73DFDVERpYcmlEtP3304TtU6s");
         
     }
     public void startLocationTracing(View view) {
@@ -31,4 +31,10 @@ public class TaxitrackActivity extends Activity {
     	this.finish();
     }
 
+    public void stopLocationTracing(View view) {
+    	Intent intent = new Intent(this, LocationService.class);
+    	stopService(intent);
+    	//startActivity(intent);
+    	this.finish();
+    }
 }

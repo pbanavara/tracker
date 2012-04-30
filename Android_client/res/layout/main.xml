@@ -56,9 +56,14 @@
         android:id="@+id/button1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Done"
+        android:text="Start"
         android:onClick="startLocationTracing" />
     
-/>
+ <Button
+        android:id="@+id/button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Stop"
+        android:onClick="stopLocationTracing" />
 
 </LinearLayout>

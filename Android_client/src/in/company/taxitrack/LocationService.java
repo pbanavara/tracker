@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.IBinder;
 
@@ -14,7 +16,7 @@ import com.parse.ParseObject;
 
 public class LocationService extends Service{
 	private LocationManager locationManager;
-	private ParseObject data;
+	
 	private LocationListener listener;
 	private String userName;
 	private String phoneNumber;
@@ -65,12 +67,15 @@ public class LocationService extends Service{
 
 		@Override
 		public void onLocationChanged(Location location) {
+			ParseObject data;
 			// TODO Auto-generated method stub
 			try {
 				//Save data to database as well
+				
 				data = new ParseObject("taxilocations");
 				ParseGeoPoint geoPoint = new ParseGeoPoint(location.getLatitude(),location.getLongitude());
 				data.put("ID", phoneNumber);
+				data.put("name", userName);
 				data.put("vendor", vendorName);
 				data.put("locations", geoPoint);
 				data.put("speed", location.getSpeed());
